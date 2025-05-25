@@ -98,8 +98,8 @@ def build_vector_store():
                 Document(page_content="The schedule outlines online session timings, faculty names, and WebEx links for AI, Machine Learning, and Data Science courses...", metadata={"source": "Schedule.pdf", "title": "Overview"}),
                 Document(page_content="Saturday Regular Classes: AI in Healthcare — Dr. Vipin Kamble, 2:00–5:00 PM; Deep Learning Techniques — Dr. Anamika Singh...", metadata={"source": "Schedule.pdf", "title": "Regular Sessions - Saturday"}),
                 Document(page_content="Sunday Regular Classes: NLP — Dr. Saugata Sinha, 2:00–5:00 PM; Big Data Analytics — Ashish Tiwari, 11:30–2:30 PM", metadata={"source": "Schedule.pdf", "title": "Regular Sessions - Sunday"}),
-                Document(page_content="Saturday Backlogs: Data Transformation — Dr. Saugata Sinha, 8:00–11:00 AM; Computer Vision — Dr. Vishal Satpute...", metadata={"source": "Schedule.pdf", "title": "Backlog - Saturday"}),
-                Document(page_content="Sunday Backlogs: Statistics for ML — Dr. Prabhat Sharma; Programming for Data Science — Dr. Praveen Pawar", metadata={"source": "Schedule.pdf", "title": "Backlog - Sunday"}),
+                Document(page_content="Saturday Regular & Backlogs: Data Transformation — Dr. Saugata Sinha, 8:00–11:00 AM; Computer Vision — Dr. Vishal Satpute...", metadata={"source": "Schedule.pdf", "title": "Regular & Backlog - Saturday"}),
+                Document(page_content="Sunday Regular & Backlogs: Statistics for ML (also known as Statistics) — Dr. Prabhat Sharma; Programming for Data Science — Dr. Praveen Pawar", metadata={"source": "Schedule.pdf", "title": "Regular & Backlog - Sunday"}),
                 Document(page_content="Additional Backlog: Neural Networks, IoT, Deployment of ML Models", metadata={"source": "Schedule.pdf", "title": "Additional Backlog"}),
                 Document(page_content="Key takeaways: Regular sessions 2–5 PM; Backlogs in AM slots; Industry experts contribute", metadata={"source": "Schedule.pdf", "title": "Key Takeaways"})
             ])
@@ -229,7 +229,7 @@ def main():
         st.session_state.chat_history = []
 
     vector_store = build_vector_store()
-    retriever = vector_store.as_retriever(search_kwargs={"k": 3})
+    retriever = vector_store.as_retriever(search_kwargs={"k": 5})
 
     llm = HuggingFaceHub(
         repo_id="HuggingFaceH4/zephyr-7b-beta",
