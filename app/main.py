@@ -67,7 +67,7 @@ def build_vector_store():
 
     # Process curriculum.txt first
     if "curriculum.txt" in txt_files:
-        st.info("Processing curriculum.txt")
+        # st.info("Processing curriculum.txt")  # Commented out processing message
         with open(os.path.join("data", "curriculum.txt"), 'r') as file:
             raw_text = file.read()
 
@@ -122,7 +122,7 @@ def build_vector_store():
             return chunks
 
         curriculum_chunks = split_curriculum_into_main_sections(raw_text)
-        st.info(f"Created {len(curriculum_chunks)} main chunks from curriculum.txt")
+        # st.info(f"Created {len(curriculum_chunks)} main chunks from curriculum.txt")  # Commented out chunk count message
         custom_chunks.extend(curriculum_chunks)
 
     # Process PDF files
@@ -215,6 +215,17 @@ def render_message(role, content, timestamp=None):
     avatar = "🧑" if role == "user" else "🤖"
     if not timestamp:
         timestamp = datetime.now().strftime("%H:%M")
+    
+    # Only display the answer for assistant messages
+    if role == "assistant":
+        # Extract just the answer part (after <|assistant|>)
+        if "<|assistant|>" in content:
+            content = content.split("<|assistant|>")[-1].strip()
+        if "<|system|>" in content:
+            content = content.split("<|system|>")[-1].strip()
+        if "<|user|>" in content:
+            content = content.split("<|user|>")[-1].strip()
+    
     st.markdown(
         f"""
         <div class="stChatMessage {bubble_class}">
@@ -260,30 +271,6 @@ def main():
         """)
         st.markdown("---")
         
-        # Display curriculum chunks
-        st.markdown("**Course Structure:**")
-        
-        # Debug information
-        all_docs = list(st.session_state.vector_store.docstore._dict.values())
-        st.write(f"Total documents: {len(all_docs)}")
-        
-        # Filter curriculum chunks
-        curriculum_chunks = [doc for doc in all_docs 
-                           if doc.metadata.get("source") == "curriculum.txt"]
-        st.write(f"Curriculum chunks: {len(curriculum_chunks)}")
-        
-        # Sort chunks by their title (which contains the section number)
-        curriculum_chunks.sort(key=lambda x: x.metadata.get("title", ""))
-        
-        # Display each chunk
-        for chunk in curriculum_chunks:
-            title = chunk.metadata.get("title", "Section")
-            content = chunk.page_content
-            with st.expander(title):
-                st.write(content)
-                st.markdown(f"*Source: {chunk.metadata.get('source', '')}*")
-        
-        st.markdown("---")
         st.markdown("**Contact:** support@vnit.ac.in")
         st.markdown("**Version:** 1.0.0")
 
